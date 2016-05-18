@@ -1,2 +1,7 @@
-{"name": "buddy-bot-iris",
- "version": "0.0.1"}
+{
+  "name": "buddy-bot-iris",
+  "version": "0.0.1",
+  "dependencies": {
+    "botkit": "0.1.1"
+  }
+}
