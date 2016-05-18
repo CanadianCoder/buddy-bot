@@ -1,1 +1,1 @@
-web: node buddybot.js
+worker: node buddybot.js
