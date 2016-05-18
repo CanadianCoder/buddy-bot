@@ -1,13 +1,19 @@
-var Botkit = require('botkit');
-var os = require('os');
+var Botkit = require('botkit')
+var token = process.env.SLACK_TOKEN
 
 var controller = Botkit.slackbot({
     debug: false
 });
 
+var token = 'xoxb-43441349009-rjzcDjio5yPhjxSpUst067sq'
+
 var bot = controller.spawn({
-    token: process.env.token
-}).startRTM();
+    token: token
+}).startRTM(function(err,bot,payload) {
+  if (err) {
+    throw new Error(err)
+  }
+});
 
 controller.hears(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 	, 'direct_message,direct_mention,mention', function(bot, message) {

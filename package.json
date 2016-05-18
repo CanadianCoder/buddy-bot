@@ -1,6 +1,22 @@
 {
   "name": "buddy-bot-iris",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "A very friendly chat bot for Slack",
+  "main": "buddybot.js",
+  "scripts": {
+    "start": "node buddybot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canadiancoder/buddy-bot.git"
+  },
+  "keywords": [
+    "slackbot",
+    "bot",
+    "slack"
+  ],
+  "author": "Simon Duchastel",
+  "license": "MIT",
   "dependencies": {
     "botkit": "0.1.1"
   }
