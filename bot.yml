@@ -1,0 +1,17 @@
+name: buddy-bot
+description: Don't worry, buddy-bot is super friendly!
+avatar: resources/icon.png
+background: resources/background.jpeg
+#config:
+#  - name: 
+#    friendly_name: 
+#    info: 
+#    default: 
+#  - name: 
+#    friendly_name: 
+#    info: 
+#    type: 
+#    default: 
+#screenshots:
+#  - screenshot: 
+#  - screenshot: 
