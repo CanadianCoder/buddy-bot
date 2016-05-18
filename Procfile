@@ -1,1 +1,1 @@
-worker: node buddybot.js
+worker: node buddybot.js xoxb-43441349009-rjzcDjio5yPhjxSpUst067sq
