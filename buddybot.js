@@ -16,10 +16,14 @@ var bot = controller.spawn({
   console.log('Connected to Slack')
 });
 
-controller.hears(['.*']
-	, ['direct_message'], function(bot, message) {
+controller.hears(['.*'], ['direct_message'], function(bot, message) {
+  var reply = "";
+  if(message.user == "gokul_gowri"){
+    reply = "Stop being so cancerous, Gokul"
+  }
+  else{
+    reply = "Thank you for sharing that information with me, " + "<@" + "message.user" + ">";
+  }
 
-    controller.storage.users.get(message.user, function(err, user) {
-        bot.reply(message, );
-    });
+  bot.reply(message, reply);
 });

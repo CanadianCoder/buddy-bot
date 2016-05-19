@@ -11,3 +11,5 @@ Overview:
 
 	node_modules - used when running locally (dependencies)
 	buddybot.js - main code for the bot
+
+Created by Simon Duchastel
