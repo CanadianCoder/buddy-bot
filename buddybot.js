@@ -22,7 +22,7 @@ controller.hears(['.*'], ['direct_message'], function(bot, message) {
     reply = "Stop being so cancerous, Gokul"
   }
   else{
-    reply = "Thank you for sharing that information with me, " + "<@" + "message.user" + ">";
+    reply = "Thank you for sharing that information with me, " + "<@" + message.user + ">";
   }
 
   bot.reply(message, reply);
