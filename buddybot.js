@@ -1,5 +1,5 @@
 var Botkit = require('botkit')
-var token = 'xoxb-43441349009-lCNZN4jNE2pEBVex4jE4oUwu';//process.env.SLACK_TOKEN
+var token = 'xoxb-43441349009-PV0iGjVN6YXkEyeNeJwfsjhz';//process.env.SLACK_TOKEN
 var request = require('request');
 
 var controller = Botkit.slackbot({
@@ -76,7 +76,7 @@ function getChannelMessages(channelToRetrieve, callback) {
       form: {
           token: token,
           channel: channelToRetrieve,
-          count: '1'
+          count: '100'
       }
     }, function(error, response, body){
     if(error) {
@@ -89,9 +89,15 @@ function getChannelMessages(channelToRetrieve, callback) {
 }
 
 //responds with most recent research when asked
-controller.hears(['show me some research'], ['direct_message', 'ambient'], function(bot, message) {
-  getChannelID("research", getChannelMessages, function(messages) {
-    var reply = messages[0];
+controller.hears(['show me some research'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+  getChannelID("send-to-trello", getChannelMessages, function(messages) {
+    var numToSelect = Math.floor(Math.random() * (messages.length - 1));
+    
+    while(messages[numToSelect].text.indexOf("http") < 0) {
+      numToSelect = Math.floor(Math.random() * (messages.length - 1));
+    }
+    var reply = "Here's some random research from the #send-to-trello:\n" + messages[numToSelect].text;
+
     bot.reply(message, reply);
   });
 });
@@ -110,10 +116,4 @@ controller.hears(['.*'], ['direct_message'], function(bot, message) {
 
     bot.reply(message, reply);
   });
-});
-
-//responds when it's name is mentioned in a channel
-controller.on('direct_mention',function(bot,message) {
-  reply = "Hi there! Don't mind me";
-  bot.reply(message, reply);
 });
