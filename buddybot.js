@@ -1,5 +1,5 @@
 var Botkit = require('botkit')
-var token = process.env.SLACK_TOKEN
+var token = 'xoxb-43441349009-lCNZN4jNE2pEBVex4jE4oUwu';//process.env.SLACK_TOKEN
 var request = require('request');
 
 var controller = Botkit.slackbot({
@@ -36,16 +36,76 @@ function getUsername(userID, callback) {
   });
 }
 
+//gets channel id
+function getChannelID(channelName, callback, _callback) {
+  request({ 
+      url: 'https://slack.com/api/channels.list',
+      method: 'POST',
+      form: {
+          token: token
+      }
+    }, function(error, response, body){
+    if(error) {
+        console.log(error);
+    } else {
+        var channels = JSON.parse(body).channels;
+        var id = "";
+        for (var i = 0; i < channels.length; i++)
+        {
+	  if(channels[i].name == channelName){
+            id = channels[i].id;
+          }
+        }
+
+        if(id == "") {
+          console.log("Error: unable to find channel name");
+        }
+        else {
+          callback(id, _callback);
+        }
+    }
+  });
+
+}
+
+//gets messages from channel
+function getChannelMessages(channelToRetrieve, callback) {
+  request({ 
+      url: 'https://slack.com/api/channels.history',
+      method: 'POST',
+      form: {
+          token: token,
+          channel: channelToRetrieve,
+          count: '1'
+      }
+    }, function(error, response, body){
+    if(error) {
+        console.log(error);
+    } else {
+        var messages = JSON.parse(body).messages;
+        callback(messages);
+    }
+  });
+}
+
+//responds with most recent research when asked
+controller.hears(['show me some research'], ['direct_message', 'ambient'], function(bot, message) {
+  getChannelID("research", getChannelMessages, function(messages) {
+    var reply = messages[0];
+    bot.reply(message, reply);
+  });
+});
+
 //responds whenever anyone says anything
 controller.hears(['.*'], ['direct_message'], function(bot, message) {
-  var username = getUsername(message.user, function (username) {
+  getUsername(message.user, function (username) {
     var reply = "";
 
     if(username == "Gokul Gowri"){
       reply = "Stop being so cancerous, Gokul"
     }
     else{
-      reply = "Good to know, " + "<@" + message.user + ">";
+      reply = "I don't understand what you're trying to say, " + "<@" + message.user + ">. I'm going to assume you're just dumb.";
     }
 
     bot.reply(message, reply);
