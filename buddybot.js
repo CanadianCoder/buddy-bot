@@ -1,5 +1,5 @@
 var Botkit = require('botkit')
-var token = 'xoxb-43441349009-PV0iGjVN6YXkEyeNeJwfsjhz';//process.env.SLACK_TOKEN
+var token = process.env.SLACK_TOKEN
 var request = require('request');
 
 var controller = Botkit.slackbot({
