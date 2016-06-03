@@ -1,6 +1,9 @@
 var Botkit = require('botkit')
-var token = process.env.SLACK_TOKEN
 var request = require('request');
+
+//gets token
+var token = process.env.SLACK_TOKEN
+if(token == undefined) { token = process.argv[2]; }
 
 var controller = Botkit.slackbot({
     retry: Infinity,
@@ -65,7 +68,6 @@ function getChannelID(channelName, callback, _callback) {
         }
     }
   });
-
 }
 
 //gets messages from channel
@@ -88,9 +90,51 @@ function getChannelMessages(channelToRetrieve, callback) {
   });
 }
 
+//gets current total number of xkcd comics
+function getTotalNumxkcd(callback, _callback) {
+  request({ 
+      url: 'http://xkcd.com/info.0.json',
+      method: 'GET'
+    }, function(error, response, body){
+    if(error) {
+        console.log(error);
+    } else {
+        var numComics = JSON.parse(body).num;
+        callback(numComics, _callback);
+    }
+  });
+}
+
+//gets random xkcd image
+function getxkcd(numComics, callback) {
+ var comicToSelect = Math.floor(Math.random() * numComics);
+  request({ 
+      url: 'http://xkcd.com/' + comicToSelect + '/info.0.json',
+      method: 'GET'
+    }, function(error, response, body){
+    if(error) {
+        console.log(error);
+    } else {
+        var image = JSON.parse(body).img;   
+        callback(image);
+    }
+  });
+}
+
+
+
+//responds with random xkcd comic when asked
+controller.hears(['show me xkcd'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+   getTotalNumxkcd(getxkcd, function(imageLink){
+      var reply = "Here's an xkcd comic by Randall Monroe:\n" + imageLink;
+
+      bot.reply(message, reply);
+   });
+});
+
 //responds with most recent research when asked
-controller.hears(['show me some research'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
-  getChannelID("send-to-trello", getChannelMessages, function(messages) {
+controller.hears(['show me research'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+    getChannelID("send-to-trello", getChannelMessages, function(messages) {
     var numToSelect = Math.floor(Math.random() * (messages.length - 1));
     
     while(messages[numToSelect].text.indexOf("http") < 0) {
