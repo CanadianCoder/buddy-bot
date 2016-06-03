@@ -1,3 +1,5 @@
+//coded by Simon Duchastel
+
 var Botkit = require('botkit')
 var request = require('request');
 
@@ -122,25 +124,34 @@ function getxkcd(numComics, callback) {
 }
 
 
+//Main responses (controller)
 
 //responds with random xkcd comic when asked
-controller.hears(['show me xkcd'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+controller.hears(['help', 'show me commands'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+   var reply = "Here's what I can do:\n\'Show me an xkcd comic\': shows a random xkcd comic\n\'Show me some research\': shows a random research link from #research (really #send-to-trello, but you don't need to know that)\nAnything else: give snarky comment";
+
+   bot.reply(message, reply);
+});
+
+
+//responds with random xkcd comic when asked
+controller.hears(['xkcd'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
    getTotalNumxkcd(getxkcd, function(imageLink){
-      var reply = "Here's an xkcd comic by Randall Monroe:\n" + imageLink;
+      var reply = "Here's an xkcd comic by Randall Munroe:\n" + imageLink;
 
       bot.reply(message, reply);
    });
 });
 
 //responds with most recent research when asked
-controller.hears(['show me research'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
+controller.hears(['research'], ['direct_mention', 'mention', 'direct_message'], function(bot, message) {
     getChannelID("send-to-trello", getChannelMessages, function(messages) {
     var numToSelect = Math.floor(Math.random() * (messages.length - 1));
     
     while(messages[numToSelect].text.indexOf("http") < 0) {
       numToSelect = Math.floor(Math.random() * (messages.length - 1));
     }
-    var reply = "Here's some random research from the #send-to-trello:\n" + messages[numToSelect].text;
+    var reply = "Here's a random research link from the #send-to-trello:\n" + messages[numToSelect].text;
 
     bot.reply(message, reply);
   });
